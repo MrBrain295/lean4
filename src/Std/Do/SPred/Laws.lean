@@ -47,11 +47,10 @@ instance : Trans (@entails σs) entails entails where
 
 theorem bientails.iff {P Q : SPred σs} : P ⊣⊢ₛ Q ↔ (P ⊢ₛ Q) ∧ (Q ⊢ₛ P) := by
   induction σs with
-  | nil => exact Iff.intro (fun h => ⟨h.mp, h.mpr⟩) (fun h => ⟨h.1, h.2⟩)
-  | cons σ σs ih
-  apply Iff.intro
-  · exact fun h => ⟨fun s => (ih.mp (h s)).1, fun s => (ih.mp (h s)).2⟩
-  · intro h s; exact ih.mpr ⟨h.1 s, h.2 s⟩
+  | nil => exact ⟨fun h => ⟨h.mp, h.mpr⟩, fun h => ⟨h.1, h.2⟩⟩
+  | cons σ σs ih =>
+    exact ⟨fun h => ⟨fun s => (ih.mp (h s)).1, fun s => (ih.mp (h s)).2⟩,
+      fun h s => ih.mpr ⟨h.1 s, h.2 s⟩⟩
 
 @[refl, simp]
 theorem bientails.refl (P : SPred σs) : P ⊣⊢ₛ P := by
